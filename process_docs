@@ -108,6 +108,69 @@ Validate Output
 •	Navigate to:
 •	bronze/2025/Apr/28/
 •	You should see .parquet files generated from your original CSV.
+
+
 Step 3: Automate AWS Glue Job 
 (Equivalent to event trigger in Microsoft azure)
+Create a Lambda Function to Trigger the Glue Job
+1.	Go to AWS Console → Lambda → Create function
+2.	Choose Author from scratch
+3.	Fill in:
+o	Function name: trigger_glue_on_upload
+o	Runtime: Python 3.12 (or latest)
+o	Execution role:
+Choose an existing role or create a new one with:
+	AWSGlueConsoleFullAccess
+	AWSLambdaBasicExecutionRole
+Attach S3 Trigger to Lambda
+1.	In the Lambda function page, go to “Triggers” → Add Trigger
+2.	Choose S3
+3.	Configure:
+o	Bucket: datascience-input-bucket
+o	Event type: PUT
+o	Prefix: csv_files/Full_load/
+o	Suffix: .csv
+4.	Click Add
+"Trigger this Lambda every time a .csv file is added under that folder structure."
+Lambda Code to Trigger Glue Job
+Replace the default code with this:
+import boto3
+
+def lambda_handler(event, context):
+    glue = boto3.client('glue') 
+    response = glue.start_job_run(
+        JobName='csv-to-prquet'  # your exact job name
+    )
+    
+    print("Glue job triggered:", response['JobRunId'])
+    return {
+        'statusCode': 200,
+        'body': 'Glue job started successfully'
+    }
+Save the function.
+Add Permissions to Lambda Role
+1.	Go to IAM → Roles
+2.	Open the Lambda execution role used above
+3.	Attach this inline policy:
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "glue:StartJobRun",
+      "Resource": "*"
+    }
+  ]
+}
+This allows Lambda to run your Glue job.
+Final Test
+1.	Upload a new file to:
+s3://datascience-input-bucket/csv_files/Full_load/2025/Jun/20/Customers_20250620.csv
+2.	Go to:
+o	AWS Lambda → Monitor → Logs (CloudWatch) to see the function was triggered
+o	AWS Glue → Job Runs to see your job ran automatically
+
+Step 4: Secure Snowflake-AWS credentials 
+(Equivalent to key vault in azure) 
+
 
