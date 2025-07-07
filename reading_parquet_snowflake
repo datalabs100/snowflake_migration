@@ -32,9 +32,9 @@ CREATE OR REPLACE TABLE orders (
   start_date   TIMESTAMP_NTZ
 );
 
-
+--unable to create dynamic dates looking for quite a long time now 
 COPY INTO customers
-FROM @DEV.DATASCIENCE.BRONZE_XML/2025/Jul/05/
+FROM @DEV.DATASCIENCE.BRONZE_XML/2025/Jul/05/                    
 FILE_FORMAT = (FORMAT_NAME = my_parquet_format)
 MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE
 PATTERN = '.*Customers_.*\\.parquet'
