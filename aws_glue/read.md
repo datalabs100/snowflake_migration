@@ -88,7 +88,7 @@ file should be in splitted format
 3. Full load: Day 2 (new inserts- 3) 
 - input (csv) -8 -->> output (parquet) - 8
               -->> bronze table (staging table) - 8 
-              -->> silver table (transformations - dedup., cleansing, UTC format, global conversions) -7 
+              -->> silver table (transformations - dedup., cleansing, UTC format, global conversions) -8 
 4. Full load: Day 3 (new inserts- 2) 
 - input (csv) -9 -->> output (parquet) - 9
               -->> bronze table (staging table) - 9 
@@ -97,5 +97,5 @@ file should be in splitted format
 - input (csv) -10 -->> output (parquet) - 10
               -->> bronze table (staging table) - 10 
               -->> silver table (transformations - dedup., cleansing, UTC format, global conversions) -9+2+1 
-
+        
 
