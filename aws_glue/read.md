@@ -84,7 +84,7 @@ file should be in splitted format
 - input (csv) -->> output (parquet) - 5
               -->> bronze table (staging table) - 5
               -->> silver table (transformations - dedup., cleansing, UTC format, global conversions) -5 
-              -->> Gold table (aggregations) 
+              -->> Gold table (aggregations) - in progress 
 3. Full load: Day 2 (new inserts- 3) 
 - input (csv) -8 -->> output (parquet) - 8
               -->> bronze table (staging table) - 8 
@@ -98,4 +98,38 @@ file should be in splitted format
               -->> bronze table (staging table) - 10 
               -->> silver table (transformations - dedup., cleansing, UTC format, global conversions) -9+2+1 
         
-
+17/10/2025
+1. Folder structures:
+    Data warehouse 
+        DDL
+            Table creation scripts
+            Alter Script
+        DML
+            Input 
+                File formats (WILL BE LOADED THROUGH GLUE/LAMBDA)
+                    csv
+                        Delta_load
+                        Full_load
+                    xml
+                        Delta_load
+                        Full_load
+                    json
+                        Delta_load
+                        Full_load
+            Bronze
+                Staging_tables
+                Stored_Proc (TO LOAD BRONZE TABLE)
+                    Historical_stored_proc (parameterized)
+                    Incremental_stored_proc (parameterized)
+            Silver
+                Transfrom_tables
+                Stored_Proc (TO LOAD SILVER TABLE)
+                    Historical_stored_proc
+                    Incremental_stored_proc
+            Gold
+                Aggregated_tables
+                Stored_Proc (TO LOAD GOLD TABLE)
+                    Historical_stored_proc
+                    Incremental_stored_proc
+        Read.md
+        
